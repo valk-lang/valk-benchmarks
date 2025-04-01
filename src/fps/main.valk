@@ -1,0 +1,44 @@
+
+use valk:time
+use valk:core
+use valk:gc
+
+class Node {
+    next: ?Node (null)
+    data: int
+}
+
+fn createObjects(amount: int) Node {
+    let i = 0
+    let first = Node { data: 0 }
+    let r = first
+    while i++ < amount {
+        let n = Node { data: i }
+        r.next = n
+        r = n
+    }
+    return first
+}
+
+fn main() {
+    println("Running game loop...")
+    let totalFrames = 500
+
+    let liveObjects = Array[Node].new()
+    liveObjects.push(createObjects(10 * 1000 * 1000))
+
+    let start = time:microtime()
+    let frame = 0
+    while frame < totalFrames {
+        gc:run_now()
+        liveObjects.push(createObjects(1))
+        frame++
+    }
+
+    let elapsed = (time:microtime() - start) / 1000
+
+    println("Kept " + liveObjects.length + " node chains alive")
+    println("Finished " + totalFrames + " frames in " + elapsed + " ms")
+    println("FPS: " + (totalFrames * 1000 / (elapsed + 1)))
+}
+
