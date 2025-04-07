@@ -30,7 +30,7 @@ fn main() {
     let start = time:microtime()
     let frame = 0
     while frame < totalFrames {
-        gc:run_now()
+        gc:run()
         liveObjects.push(createObjects(1))
         frame++
     }
